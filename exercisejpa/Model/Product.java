@@ -24,8 +24,8 @@ public class Product {
     @Column(columnDefinition = "int not null")
     private Integer price;
     @Column(columnDefinition = "varchar(20) not null")
-    @NotEmpty(message = "category ID should not be empty")
-    private String categoryID;
+    @NotNull(message = "category ID should not be empty")
+    private Integer categoryID;
     @Column(columnDefinition = "varchar(50) check ( discounts='WhiteFriday' or discounts='BlackFriday' or discounts='End of year discount' or discounts= 'no discount')")
     @NotEmpty(message = "discounts should not be empty")
     @Pattern(regexp = "^(WhiteFriday|BlackFriday|End of year discount|no discount)$")

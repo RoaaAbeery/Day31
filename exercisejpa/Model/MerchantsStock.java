@@ -16,10 +16,10 @@ public class MerchantsStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotEmpty(message = "product id should not be empty")
+    @NotNull(message = "product id should not be empty")
     @Column(columnDefinition = "int not null")
     private Integer productid;
-    @NotEmpty(message = "merchant id should not be empty")
+    @NotNull(message = "merchant id should not be empty")
     @Column(columnDefinition = "int not null")
     private Integer merchantid;
     @NotNull(message = "stock should not be empty")

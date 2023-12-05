@@ -26,12 +26,16 @@ public class MerchantStocksController {
             String message=errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
-        merchantStockService.addgetMerchantStocks(merchantsStock);
-        return ResponseEntity.status(HttpStatus.OK).body("Merchant add");
+       int add= merchantStockService.addgetMerchantStocks(merchantsStock);
+        switch (add){
+            case 1:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(" Merchant id must be equal");
+            case 2:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product id must be equal");
+            default:
+                return ResponseEntity.status(HttpStatus.OK).body("Merchant Stocks add");
+        }
     }
-
-
-
 
     @PutMapping("/updateMerchantsStocks/{id}")
     public ResponseEntity updatemerchants(@PathVariable Integer id, @Valid@RequestBody MerchantsStock merchantsStock, Errors errors){
@@ -39,11 +43,18 @@ public class MerchantStocksController {
             String message=errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
-        boolean isupdate=merchantStockService.updateMerchantStocks(id, merchantsStock);
-        if(isupdate){
-            return ResponseEntity.status(HttpStatus.OK).body(" Merchants updated");
+        Integer isupdate=merchantStockService.updateMerchantStocks(id, merchantsStock);
+        switch (isupdate){
+            case 1:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Stock id must be equal");
+            case 2:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Merchant id must be equal");
+            case 3:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product id must be equal");
+
+            default:
+                return ResponseEntity.status(HttpStatus.OK).body("Updated");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("merchant not found");
 
     }
     @DeleteMapping("/deleteMerchantsStocks/{id}")
@@ -55,5 +66,41 @@ public class MerchantStocksController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("merchant not found");
 
+    }
+    @PutMapping("/addStock/{productid}/{merchantid}/{amount}")
+    public ResponseEntity addStock(@PathVariable Integer productid ,@PathVariable Integer
+            merchantid ,@PathVariable int amount){
+        int isadd=merchantStockService.addstock(productid, merchantid, amount);
+        switch (isadd){
+            case 0:
+                return ResponseEntity.status(HttpStatus.OK).body("Stock has been increased");
+            case 1:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("merchant id must be equal");
+            default:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("product id must be equal");
+
+
+        }
+    }
+
+    @PutMapping("/buy/{userid}/{productid}/{merchantid}")
+    public ResponseEntity buy(@PathVariable Integer userid,@PathVariable Integer productid ,@PathVariable Integer merchantid ){
+        int isadd=merchantStockService.buy1(userid, productid, merchantid);
+        switch (isadd){
+            case 1:
+                return ResponseEntity.status(HttpStatus.OK).body("buy done");
+            case 2:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Stock id must be equal");
+            case 3:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("merchant id must be equal");
+            case 4:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("product id must be equal");
+            case 5:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user id must be equal");
+            default:
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("balance not enough");
+
+
+        }
     }
 }

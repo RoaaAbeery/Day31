@@ -27,9 +27,11 @@ public class ProductController {
             String message=errors.getFieldError().getDefaultMessage();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
-        productService.addProducts(product);
-
+       Boolean add= productService.addProducts(product);
+        if(add){
             return ResponseEntity.status(HttpStatus.OK).body("product add");
+        }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("product Not found");
     }
     @PutMapping("/updateProducts/{id}")
     public ResponseEntity updateProduct(@PathVariable Integer id, @Valid @RequestBody Product product, Errors errors){
